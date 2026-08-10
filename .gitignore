@@ -1,0 +1,7 @@
+*.hzq
+*.hzs
+*.o
+*.d
+*.map
+*THUMB Debug
+*THUMB Release
