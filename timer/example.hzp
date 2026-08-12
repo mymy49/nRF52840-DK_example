@@ -1,0 +1,83 @@
+<!DOCTYPE CrossStudio_Project_File>
+<solution Name="example" target="8" version="2">
+  <configuration
+    Name="Debug"
+    c_preprocessor_definitions="DEBUG"
+    gcc_debugging_level="Level 3"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="None"
+    hidden="Yes" />
+  <configuration
+    Name="Release"
+    c_preprocessor_definitions="NDEBUG"
+    gcc_debugging_level="None"
+    gcc_omit_frame_pointer="Yes"
+    gcc_optimization_level="Level 1"
+    hidden="Yes" />
+  <configuration
+    Name="THUMB"
+    Platform="ARM"
+    arm_instruction_set="Thumb"
+    arm_library_instruction_set="Thumb"
+    c_preprocessor_definitions="__THUMB"
+    hidden="Yes" />
+  <configuration Name="THUMB Debug" inherited_configurations="THUMB;Debug" />
+  <configuration
+    Name="THUMB Release"
+    inherited_configurations="THUMB;Release" />
+  <project Name="example">
+    <configuration
+      Name="Common"
+      Placement="Flash"
+      Target="nRF52840_xxAA"
+      arm_architecture="v7EM"
+      arm_core_type="Cortex-M4"
+      arm_fpu_type="FPv4-SP-D16"
+      arm_linker_heap_size="32768"
+      arm_linker_process_stack_size="1024"
+      arm_linker_stack_size="2048"
+      arm_simulator_memory_simulation_filename="$(TargetsDir)/nRF51/nRF51SimulatorMemory$(HostDLL)"
+      arm_simulator_memory_simulation_parameter="nRF52840;0x100000;0x40000"
+      arm_target_interface_type="Default"
+      arm_target_loader_applicable_loaders="Flash"
+      arm_target_loader_default_loader="Flash"
+      c_additional_options="-fms-extensions"
+      c_user_include_directories="$(TargetsDir)/nRF51/CMSIS;$(TargetsDir)/CMSIS_3/CMSIS/Include;$(ProjectDir)/app/inc;$(ProjectDir)/../yss/inc;$(ProjectDir)/../common"
+      debug_register_definition_file="$(TargetsDir)/nRF51/nRF52840_Peripherals.xml"
+      linker_memory_map_file="$(TargetsDir)/nRF51/nRF52840_xxAA_MemoryMap.xml"
+      linker_section_placement_file="$(StudioDir)/targets/Cortex_M/flash_placement.xml"
+      linker_section_placement_macros=""
+      package_dependencies="nRF51"
+      project_directory=""
+      project_type="Executable"
+      property_groups_file_path="$(TargetsDir)/nRF51/propertyGroups.xml"
+      target_get_partname_script="GetPartName()"
+      target_reset_script="Reset()"
+      target_script_file="$(TargetsDir)/nRF51/nRF51_Target.js" />
+    <configuration
+      Name="Flash"
+      arm_target_flash_loader_file_path="$(TargetsDir)/nRF51/Release/Loader.elf"
+      arm_target_loader_can_erase_all="Yes"
+      arm_target_loader_can_lock_all="No"
+      arm_target_loader_can_lock_range="No"
+      arm_target_loader_can_unlock_all="No"
+      arm_target_loader_can_unlock_range="No"
+      target_reset_script="FLASHReset()" />
+    <folder
+      Name="Source Files"
+      exclude=""
+      filter=""
+      path="app"
+      recurse="Yes" />
+    <folder Name="System Files">
+      <file file_name="$(TargetsDir)/nRF51/nRF51_Startup.s" />
+      <file file_name="$(StudioDir)/source/thumb_crt0.s" />
+    </folder>
+    <folder
+      Name="yss OS Source Files"
+      exclude=""
+      filter=""
+      path="../yss"
+      recurse="Yes" />
+  </project>
+</solution>
