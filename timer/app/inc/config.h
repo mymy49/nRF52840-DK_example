@@ -15,8 +15,11 @@
 #define USE_HFXO			true
 
 // ####################### 스케줄러 설정 #######################
-// runtime 함수를 지원할 TIMER 장치 설정 (RUNTIME_TIMER0 ~ 5)
-#define YSS_TIMER			RUNTIME_TIMER0
+// runtime 함수를 지원할 TIMER 장치 설정 (RUNTIME_TIMER0 ~ 4)
+#define YSS_RUNTIME_TIMER			RUNTIME_TIMER0
+
+// delay 함수를 지원할 TIMER 장치 설정 (DELAY_TIMER0 ~ 4)
+#define YSS_DELAY_TIMER				DELAY_TIMER1
 
 // 쓰레드당 할당 받는 Systick Clock의 수
 #define THREAD_GIVEN_CLOCK	20000
@@ -42,7 +45,7 @@
 
 // TIMER 활성화
 #define TIMER0_ENABLE		false
-#define TIMER1_ENABLE		true
+#define TIMER1_ENABLE		false
 #define TIMER2_ENABLE		true
 #define TIMER3_ENABLE		true
 #define TIMER4_ENABLE		true

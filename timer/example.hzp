@@ -10,7 +10,7 @@
   <configuration
     Name="Release"
     c_preprocessor_definitions="NDEBUG"
-    gcc_debugging_level="None"
+    gcc_debugging_level="Level 3"
     gcc_omit_frame_pointer="Yes"
     gcc_optimization_level="Level 1"
     hidden="Yes" />
@@ -32,6 +32,7 @@
       Target="nRF52840_xxAA"
       arm_architecture="v7EM"
       arm_core_type="Cortex-M4"
+      arm_fp_abi="Hard"
       arm_fpu_type="FPv4-SP-D16"
       arm_linker_heap_size="32768"
       arm_linker_process_stack_size="1024"

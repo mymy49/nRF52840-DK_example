@@ -8,36 +8,25 @@
 #include <bsp.h>
 #include <yss/instance.h>
 
-uint32_t gTimer1Counter, gTimer2Counter, gTimer3Counter, gTimer4Counter;
-
-void isr_timer1(void)
-{
-	gTimer1Counter++;
-}
+volatile float gTimer2Counter, gTimer3Counter, gTimer4Counter;
 
 void isr_timer2(void)
 {
-	gTimer2Counter++;
+	gTimer2Counter += 0.000001f;
 }
 
 void isr_timer3(void)
 {
-	gTimer3Counter++;
+	gTimer3Counter += 0.000001f;
 }
 
 void isr_timer4(void)
 {
-	gTimer4Counter++;
+	gTimer4Counter += 0.000001f;
 }
 
 void initializeBoard(void)
 {
-	timer1.enableClock();
-	timer1.initialize(100);
-	timer1.setIsrForUpdate(isr_timer1);
-	timer1.enableInterrupt();
-	timer1.start();
-
 	timer2.enableClock();
 	timer2.initialize(1000);
 	timer2.setIsrForUpdate(isr_timer2);
