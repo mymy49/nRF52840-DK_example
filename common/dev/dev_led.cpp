@@ -12,10 +12,10 @@ namespace led
 {
 	void initialize(void)
 	{
-		gpio0.setAsOutput(13);
-		gpio0.setAsOutput(14);
-		gpio0.setAsOutput(15);
-		gpio0.setAsOutput(16);
+		gpio0.setAsOutput(13, Gpio::H0S1);
+		gpio0.setAsOutput(14, Gpio::H0S1);
+		gpio0.setAsOutput(15, Gpio::H0S1);
+		gpio0.setAsOutput(16, Gpio::H0S1);
 
 		setLed1(false);
 		setLed2(false);
