@@ -5,12 +5,29 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file bsp.h
+ * @brief Board Support Package (BSP) header for the nRF52840-DK LED blink example.
+ *
+ * This header declares the board-level initialization interface used to set up
+ * all on-board peripherals required by the application (e.g., LED drivers).
+ */
+
 #ifndef BSP__H_
 #define BSP__H_
 
-#include <stdint.h>
-#include <dev/led.h>
+#include <stdint.h>   ///< Standard integer type definitions (uint8_t, uint32_t, etc.)
+#include <dev/led.h>  ///< LED device driver interface
 
+/**
+ * @brief Initializes all on-board peripherals.
+ *
+ * This function must be called once during system startup, after the RTOS
+ * (yss) has been initialized. It performs hardware-specific setup for all
+ * peripherals declared in the BSP, including LED initialization.
+ *
+ * @note Call initializeYss() before calling this function.
+ */
 void initializeBoard(void);
 
 #endif

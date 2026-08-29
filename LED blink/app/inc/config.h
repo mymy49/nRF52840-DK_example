@@ -5,46 +5,94 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file config.h
+ * @brief System-wide configuration header for the yss RTOS on nRF52840-DK.
+ *
+ * This file provides compile-time configuration macros for the yss real-time
+ * operating system and the application peripherals. Modify the values here to
+ * tune the scheduler, enable/disable peripherals, and adjust hardware settings.
+ */
+
 #ifndef YSS_CONFIG__H_
 #define YSS_CONFIG__H_
 
-// ####################### 외부 크리스탈 클럭 주파수 설정 #######################
-// 아래 HSE_CLOCK_FREQ가 정의 되어 있으면 HSE 클럭을 소스로 PLL 설정이 이뤄집니다.
-// 정의되어 있지 않으면 HSI 클럭을 소스로 PLL 설정이 이뤄집니다.
-// 크리스탈은 반드시 4 MHz의 배수로 사용해야 합니다.
+// =====================================================================
+// High-Frequency Crystal Oscillator (HFXO) Configuration
+// =====================================================================
+/// @brief Enables the external 32 MHz high-frequency crystal oscillator (HFXO).
+///
+/// When defined/set to true, the system clock is sourced from the external
+/// crystal rather than the internal RC oscillator, providing higher accuracy.
+/// The crystal frequency must be a multiple of 4 MHz.
 #define USE_HFXO			true
 
-// ####################### 스케줄러 설정 #######################
-// runtime 함수를 지원할 TIMER 장치 설정 (RUNTIME_TIMER0 ~ 5)
+// =====================================================================
+// Scheduler Configuration
+// =====================================================================
+/// @brief Selects the hardware timer used by the yss runtime scheduler.
+///
+/// Specifies which TIMER peripheral drives the RTOS tick. Valid values are
+/// RUNTIME_TIMER0 through RUNTIME_TIMER5.
 #define YSS_TIMER			RUNTIME_TIMER0
 
-// 쓰레드당 할당 받는 Systick Clock의 수
+/// @brief Number of SysTick clocks allocated per thread time-slice.
+///
+/// Each thread is granted this many SysTick counts before the scheduler
+/// considers preempting it. A higher value gives each thread more CPU time
+/// per slice.
 #define THREAD_GIVEN_CLOCK	20000
 
-// 최대 등록 가능한 쓰레드의 수
+/// @brief Maximum number of threads that can be registered simultaneously.
+///
+/// Determines the size of the internal thread control-block table. Increase
+/// this value if the application requires more concurrent threads.
 #define MAX_THREAD			16
 
-// 쓰레드의 스택을 0xAA 패턴으로 채우기 (true, false)
+/// @brief Fills each thread stack with the 0xAA pattern on creation.
+///
+/// When set to true, the initial stack memory of every thread is pre-filled
+/// with 0xAA. This is useful for measuring peak stack usage during debugging.
+/// Set to false in production builds to save startup time.
 #define FILL_THREAD_STACK	false
 
-// ####################### GUI 설정 #######################
-// GUI library Enable (true, false)
+// =====================================================================
+// GUI Library Configuration
+// =====================================================================
+/// @brief Enables the yss graphical user interface (GUI) library.
+///
+/// Set to true to compile in the GUI subsystem. This example does not use
+/// a display, so the GUI library is disabled.
 #define USE_GUI				false
 
-// ####################### KEY 설정 #######################
-// 최대 KEY 생성 가능 갯수 설정 (0 ~ ), 0일 경우 기능 꺼짐
+// =====================================================================
+// Key (Button) Configuration
+// =====================================================================
+/// @brief Maximum number of key objects that can be created.
+///
+/// Set to 0 to disable the key (button) subsystem entirely.
+/// Increase this value to match the number of physical buttons used.
 #define NUM_OF_YSS_KEY		0
 
-// ###################### 주변 장치 활성화 ######################
-// 활성화 시킬 장치에 대해 false -> true로 변경하여 활성화 합니다.
-//
-// 주의 
+// =====================================================================
+// Peripheral Enable/Disable Configuration
+// =====================================================================
+// Set each macro to true to enable the corresponding peripheral, or
+// false to disable it. Disabled peripherals consume no RAM or clock.
 
-// TIMER 활성화
+/// @brief Enables TIMER0 peripheral. Disabled here; TIMER0 is reserved for the runtime scheduler.
 #define TIMER0_ENABLE		false
+
+/// @brief Enables TIMER1 peripheral.
 #define TIMER1_ENABLE		true
+
+/// @brief Enables TIMER2 peripheral.
 #define TIMER2_ENABLE		true
+
+/// @brief Enables TIMER3 peripheral.
 #define TIMER3_ENABLE		true
+
+/// @brief Enables TIMER4 peripheral.
 #define TIMER4_ENABLE		true
 
 #endif
