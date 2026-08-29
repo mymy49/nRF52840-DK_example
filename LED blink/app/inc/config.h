@@ -32,9 +32,19 @@
 // =====================================================================
 /// @brief Selects the hardware timer used by the yss runtime scheduler.
 ///
-/// Specifies which TIMER peripheral drives the RTOS tick. Valid values are
-/// RUNTIME_TIMER0 through RUNTIME_TIMER5.
-#define YSS_TIMER			RUNTIME_TIMER0
+/// Specifies which TIMER peripheral drives the RTOS tick and manages
+/// thread preemption. Valid values are RUNTIME_TIMER0 through RUNTIME_TIMER5.
+/// This timer is consumed exclusively by the RTOS and must not be used
+/// as a general-purpose timer by the application.
+#define YSS_RUNTIME_TIMER	RUNTIME_TIMER0
+
+/// @brief Selects the hardware timer used by the yss delay functions.
+///
+/// Specifies which TIMER peripheral is used to implement blocking and
+/// non-blocking delay functions (e.g., thread::delay(), thread::delayUs()).
+/// Valid values are DELAY_TIMER0 through DELAY_TIMER4.
+/// This timer must be different from the one assigned to YSS_RUNTIME_TIMER.
+#define YSS_DELAY_TIMER		DELAY_TIMER1
 
 /// @brief Number of SysTick clocks allocated per thread time-slice.
 ///
@@ -83,8 +93,8 @@
 /// @brief Enables TIMER0 peripheral. Disabled here; TIMER0 is reserved for the runtime scheduler.
 #define TIMER0_ENABLE		false
 
-/// @brief Enables TIMER1 peripheral.
-#define TIMER1_ENABLE		true
+/// @brief Enables TIMER1 peripheral. Disabled here; TIMER1 is reserved for the delay timer (YSS_DELAY_TIMER).
+#define TIMER1_ENABLE		false
 
 /// @brief Enables TIMER2 peripheral.
 #define TIMER2_ENABLE		true
