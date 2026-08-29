@@ -5,50 +5,107 @@
  * See the file "LICENSE" in the main directory of this archive for more details.
  */
 
+/**
+ * @file config.h
+ * @brief System-wide configuration header for the yss RTOS on nRF52840-DK (timer example).
+ *
+ * This file provides compile-time configuration macros for the yss real-time
+ * operating system and the application peripherals used in the timer counting
+ * example. Modify the values here to tune the scheduler, enable/disable
+ * peripherals, and adjust hardware settings.
+ */
+
 #ifndef YSS_CONFIG__H_
 #define YSS_CONFIG__H_
 
-// ####################### 외부 크리스탈 클럭 주파수 설정 #######################
-// 아래 HSE_CLOCK_FREQ가 정의 되어 있으면 HSE 클럭을 소스로 PLL 설정이 이뤄집니다.
-// 정의되어 있지 않으면 HSI 클럭을 소스로 PLL 설정이 이뤄집니다.
-// 크리스탈은 반드시 4 MHz의 배수로 사용해야 합니다.
-#define USE_HFXO			true
+// =====================================================================
+// High-Frequency Crystal Oscillator (HFXO) Configuration
+// =====================================================================
+/// @brief Enables the external 32 MHz high-frequency crystal oscillator (HFXO).
+///
+/// When set to true, the system clock is sourced from the external crystal
+/// rather than the internal RC oscillator, providing higher accuracy.
+/// The crystal frequency must be a multiple of 4 MHz.
+#define USE_HFXO				true
 
-// ####################### 스케줄러 설정 #######################
-// runtime 함수를 지원할 TIMER 장치 설정 (RUNTIME_TIMER0 ~ 4)
-#define YSS_RUNTIME_TIMER			RUNTIME_TIMER0
+// =====================================================================
+// Scheduler Configuration
+// =====================================================================
+/// @brief Selects the hardware timer used by the yss runtime scheduler.
+///
+/// Specifies which TIMER peripheral drives the RTOS tick and manages
+/// thread preemption. Valid values are RUNTIME_TIMER0 through RUNTIME_TIMER5.
+/// This timer is consumed exclusively by the RTOS and must not be used
+/// as a general-purpose timer by the application.
+#define YSS_RUNTIME_TIMER		RUNTIME_TIMER0
 
-// delay 함수를 지원할 TIMER 장치 설정 (DELAY_TIMER0 ~ 4)
-#define YSS_DELAY_TIMER				DELAY_TIMER1
+/// @brief Selects the hardware timer used by the yss delay functions.
+///
+/// Specifies which TIMER peripheral is used to implement blocking and
+/// non-blocking delay functions (e.g., thread::delay(), thread::delayUs()).
+/// Valid values are DELAY_TIMER0 through DELAY_TIMER4.
+/// This timer must be different from the one assigned to YSS_RUNTIME_TIMER.
+#define YSS_DELAY_TIMER			DELAY_TIMER1
 
-// 쓰레드당 할당 받는 Systick Clock의 수
-#define THREAD_GIVEN_CLOCK	20000
+/// @brief Number of SysTick clocks allocated per thread time-slice.
+///
+/// Each thread is granted this many SysTick counts before the scheduler
+/// considers preempting it. A higher value gives each thread more CPU time
+/// per slice.
+#define THREAD_GIVEN_CLOCK		20000
 
-// 최대 등록 가능한 쓰레드의 수
-#define MAX_THREAD			16
+/// @brief Maximum number of threads that can be registered simultaneously.
+///
+/// Determines the size of the internal thread control-block table. Increase
+/// this value if the application requires more concurrent threads.
+#define MAX_THREAD				16
 
-// 쓰레드의 스택을 0xAA 패턴으로 채우기 (true, false)
-#define FILL_THREAD_STACK	false
+/// @brief Fills each thread stack with the 0xAA pattern on creation.
+///
+/// When set to true, the initial stack memory of every thread is pre-filled
+/// with 0xAA. This is useful for measuring peak stack usage during debugging.
+/// Set to false in production builds to save startup time.
+#define FILL_THREAD_STACK		false
 
-// ####################### GUI 설정 #######################
-// GUI library Enable (true, false)
-#define USE_GUI				false
+// =====================================================================
+// GUI Library Configuration
+// =====================================================================
+/// @brief Enables the yss graphical user interface (GUI) library.
+///
+/// Set to true to compile in the GUI subsystem. This example does not use
+/// a display, so the GUI library is disabled.
+#define USE_GUI					false
 
-// ####################### KEY 설정 #######################
-// 최대 KEY 생성 가능 갯수 설정 (0 ~ ), 0일 경우 기능 꺼짐
-#define NUM_OF_YSS_KEY		0
+// =====================================================================
+// Key (Button) Configuration
+// =====================================================================
+/// @brief Maximum number of key objects that can be created.
+///
+/// Set to 0 to disable the key (button) subsystem entirely.
+/// Increase this value to match the number of physical buttons used.
+#define NUM_OF_YSS_KEY			0
 
-// ###################### 주변 장치 활성화 ######################
-// 활성화 시킬 장치에 대해 false -> true로 변경하여 활성화 합니다.
-//
-// 주의 
+// =====================================================================
+// Peripheral Enable/Disable Configuration
+// =====================================================================
+// Set each macro to true to enable the corresponding peripheral, or
+// false to disable it. Disabled peripherals consume no RAM or clock.
 
-// TIMER 활성화
-#define TIMER0_ENABLE		false
-#define TIMER1_ENABLE		false
-#define TIMER2_ENABLE		true
-#define TIMER3_ENABLE		true
-#define TIMER4_ENABLE		true
+// --- TIMER ---
+/// @brief Enables TIMER0 peripheral. Disabled here; TIMER0 is reserved for the runtime scheduler.
+#define TIMER0_ENABLE			false
+
+/// @brief Enables TIMER1 peripheral. Disabled here; TIMER1 is reserved for the delay timer (YSS_DELAY_TIMER).
+#define TIMER1_ENABLE			false
+
+/// @brief Enables TIMER2 peripheral. Used in this example as a 1,000 Hz (1 ms) interval timer.
+#define TIMER2_ENABLE			true
+
+/// @brief Enables TIMER3 peripheral. Used in this example as a 10,000 Hz (100 µs) interval timer.
+#define TIMER3_ENABLE			true
+
+/// @brief Enables TIMER4 peripheral. Used in this example as a 100,000 Hz (10 µs) interval timer.
+#define TIMER4_ENABLE			true
 
 #endif
 
